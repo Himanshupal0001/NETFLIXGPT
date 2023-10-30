@@ -1,11 +1,85 @@
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { netflixLogo } from '../../public/assets/netflixLogo'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { IoLanguageOutline } from 'react-icons/io5'
 import { AiOutlineCaretDown } from 'react-icons/ai'
-
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from '../utils/firebase';
+import { useDispatch } from 'react-redux'
+import { addUser } from '../redux/authSlice'
+import Loader from '../components/Loader'
 
 function SignupRegFormPage() {
+    const dispatch = useDispatch();
+    const [email, setEmail] = useState('')
+    const [errorMessage, setErrorMessage] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const password = useRef(null);
+    const navigate = useNavigate();
+    useEffect(() => {
+        getEmailFromLocalStorage();
+    }, [])
+    const getEmailFromLocalStorage = () => {
+        const locEmail = localStorage.getItem('email');
+        if (locEmail !== '') {
+            setEmail(locEmail);
+        }
+    }
+
+
+    const handleClick = () => {
+        if (password.current.value === '') {
+            setErrorMessage('Password is required');
+            return;
+        }
+        const isPasswordValid = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(password.current.value);
+        if (!isPasswordValid) {
+            setErrorMessage('Password is not valid');
+            return
+        }
+        setIsLoading(true);
+        createUserWithEmailAndPassword(
+            auth,
+            email,
+            password.current.value
+        )
+            .then(
+                (userCredentials) => {
+                    const user = userCredentials.user;
+                    //console.log('sign up user', user)
+                }
+            )
+            .then(() => {
+                setTimeout(() => {
+                    signInWithEmailAndPassword(auth, email, password.current.value).
+                        then(userCredentials => {
+                            const user = userCredentials.user;
+                            //console.log('login user', user)
+                            const { uid, accessToken } = user;
+                            if (uid, accessToken) {
+                                dispatch(addUser({ uid: uid, token: accessToken }))
+                            }
+                            navigate('/signup')
+                        })
+                        .catch(error => {
+                            const errorCode = error.code;
+                            const errorMesage = error.message;
+                            console.log(errorMesage)
+                        })
+                        .finally(() => {
+                            setIsLoading(false);
+                        })
+                }, 100);
+            })
+            .catch(
+                (error) => {
+                    const errorCode = error.code;
+                    const errorMesage = error.message;
+                    console.log(errorMesage);
+                    setIsLoading(false)
+                }
+            )
+    }
     return (
         <>
             <div>
@@ -16,7 +90,7 @@ function SignupRegFormPage() {
                         </div>
                     </Link>
                     <div>
-                        <Link to='/'>
+                        <Link to='/login'>
                             <p className='sm:text-lg font-semibold hover:underline'>Sign In</p>
                         </Link>
                     </div>
@@ -36,21 +110,21 @@ function SignupRegFormPage() {
                                 We hate paperwork, too.
                             </div>
 
-                            <form className='flex flex-col gap-y-2'>
-
+                            <form className='flex flex-col gap-y-2' onSubmit={e => e.preventDefault()}>
                                 <label htmlFor='email'>Email</label>
-                                <input id='email' type='text' placeholder='Email' className='px-2 py-3 border-stone-400 border-2 rounded-md' />
+                                <input id='email' type='text' placeholder='Email' value={email || ''} className='px-2 py-3 border-stone-400 border-2 rounded-md' readOnly />
 
-                                <label htmlFor='password'>Password</label>
-                                <input id='password' type='password' placeholder='Add a password' className='px-2 py-3 border-stone-400 border-2 rounded-md' />
+                                <label htmlFor='password' className='mt-3'>Password</label>
+                                <input id='password' type='password' ref={password} placeholder='Add a password' className='px-2 py-3 border-stone-400 border-2 rounded-md' />
+                                <span className='text-red-500'>{errorMessage}</span>
 
                                 <span className='flex gap-x-2 items-center mt-2'>
                                     <input type='checkbox' className='h-8 w-8 sm:h-5 sm:w-5' />
                                     <span className='text-lg'>Please do not email me netflix special offers.</span>
                                 </span>
                                 <div className='h-fit flex justify-center mt-4'>
-                                    <button className='p-2 h-16 sm:w-96 w-full sm:p-4 bg-red-600  text-white rounded-md text-center sm:flex items-center justify-center m-auto sm:m-0'>
-                                        <div className='text-2xl font-bold'>Next</div>
+                                    <button className='p-2 h-16 sm:w-96 w-full sm:p-4 bg-red-600 hover:bg-red-500 text-white rounded-md text-center sm:flex items-center justify-center m-auto sm:m-0 text-2xl font-semibold' type='submit' onClick={handleClick}>
+                                        {isLoading ? <Loader /> : 'Next'}
                                     </button>
                                 </div>
                             </form>

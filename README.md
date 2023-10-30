@@ -1,4 +1,8 @@
 # Netflix GPT
+-parcel
+-install react
+-install react-router-dom
+-Routing of app
 
 
 # Structure

@@ -3,8 +3,27 @@ import { netflixLogo } from '../../public/assets/netflixLogo'
 import { Link } from 'react-router-dom'
 import { AiOutlineCaretDown } from 'react-icons/ai'
 import { IoLanguageOutline } from 'react-icons/io5';
+import { useSelector } from 'react-redux';
+import useSignout from '../hooks/useSignout';
+import { app } from '../utils/firebase';
+import { NETFLIX_BASIC_PRICEID, NETFLIX_STANDARD_PRICEID, NETFLIX_PREMIUM_PRICEID } from '../utils/utils';
+import { getCheckoutUrl } from '../utils/stripeCheckout';
+import Loader from '../components/Loader'
 function SignupChoosePlan() {
-    const [plan, setPlan] = useState('premium');
+    const { user } = useSelector(store => store.auth);
+    const [plan, setPlan] = useState(NETFLIX_PREMIUM_PRICEID);
+    const handleSignout = useSignout();
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleCheckout = async () => {
+        setIsLoading(true);
+        const priceId = plan;
+        const checkoutUrl = await getCheckoutUrl(app, priceId);
+        if (checkoutUrl) {
+            window.open(checkoutUrl, '_self');
+            setIsLoading(false)
+        }
+    }
     return (
         <div>
             <header className='flex sm:h-[12vh] items-center justify-between px-2 sm:px-8 border-b-[1/2px] sm:border-b-[0.1rem] py-1 border-stone-200'>
@@ -13,10 +32,8 @@ function SignupChoosePlan() {
                         <img src={netflixLogo} alt='logo' className='w-24 h-auto sm:w-52' />
                     </div>
                 </Link>
-                <div>
-                    <Link to='/'>
-                        <p className='sm:text-lg font-semibold hover:underline'>Sign In</p>
-                    </Link>
+                <div onClick={() => handleSignout(user?.token)}>
+                    <p className='sm:text-lg font-semibold hover:underline'>{user.token ? 'Sign out' : 'Sign in'}</p>
                 </div>
             </header>
             <section className='h-screen flex justify-center mb-40'>
@@ -47,7 +64,7 @@ function SignupChoosePlan() {
                             </span>
                         </div>
                     </div>
-                    <form onSubmit={e => { e.preventDefault(); console.log(e.target.value) }}>
+                    <form onSubmit={e => e.preventDefault()}>
 
                         <table className='w-fit sm:w-full text-stone-500 font-medium'>
                             <thead className='sticky top-0 bg-white'>
@@ -56,8 +73,8 @@ function SignupChoosePlan() {
                                     <th>
                                         <div className='py-4 px-2 sm:px-4 flex items-center justify-center'>
                                             <label htmlFor='basic' className={`h-[16vmin] w-[25vmin] sm:w-[16vmin] ${plan !== 'basic' ? 'bg-red-400' : 'bg-red-500'} relative text-white flex justify-center items-center font-medium`}>Basic
-                                                <input type='radio' name='payment_plan' id='basic' value='basic' className='hidden' checked={plan === 'basic'}
-                                                    onChange={e => setPlan(e.target.value)}
+                                                <input type='radio' name='payment_plan' id='basic' value={NETFLIX_BASIC_PRICEID} className='hidden' checked={plan === 'basic'}
+                                                    onChange={e => setPlan(NETFLIX_BASIC_PRICEID)}
                                                 >
                                                 </input>
                                                 <span className={`h-4 w-4 -bottom-3 absolute  border-l-[15px] border-r-[15px] border-l-transparent border-r-transparent border-t-[20px] ${plan !== 'basic' ? 'border-red-400' : 'border-red-500'}`}></span>
@@ -67,8 +84,8 @@ function SignupChoosePlan() {
                                     <th>
                                         <div className='py-4 px-2 sm:px-4 flex items-center justify-center'>
                                             <label htmlFor='standard' className={`h-[16vmin] w-[25vmin] sm:w-[16vmin] ${plan !== 'standard' ? 'bg-red-400' : 'bg-red-500'} relative text-white flex justify-center items-center font-medium`}>Standard
-                                                <input type='radio' name='payment_plan' id='standard' value='standard' className='hidden' checked={plan === 'standard'}
-                                                    onChange={e => setPlan(e.target.value)}>
+                                                <input type='radio' name='payment_plan' id='standard' value={NETFLIX_STANDARD_PRICEID} className='hidden' checked={plan === 'standard'}
+                                                    onChange={e => setPlan(NETFLIX_STANDARD_PRICEID)}>
                                                 </input>
                                                 <span className={`h-4 w-4 -bottom-3 absolute  border-l-[15px] border-r-[15px] border-l-transparent border-r-transparent border-t-[20px] ${plan !== 'standard' ? 'border-red-400' : 'border-red-500'}`}></span>
                                             </label>
@@ -77,8 +94,8 @@ function SignupChoosePlan() {
                                     <th>
                                         <div className='py-4 px-2 sm:px-4 flex items-center justify-center'>
                                             <label htmlFor='premium' className={`h-[16vmin] w-[25vmin] sm:w-[16vmin] ${plan !== 'premium' ? 'bg-red-400' : 'bg-red-500'} relative text-white flex justify-center items-center font-medium`}>Premium
-                                                <input type='radio' name='payment_plan' id='premium' value='premium' className='hidden' checked={plan}
-                                                    onChange={e => setPlan(e.target.value)}>
+                                                <input type='radio' name='payment_plan' id='premium' value={NETFLIX_PREMIUM_PRICEID} className='hidden' checked={plan}
+                                                    onChange={e => setPlan(NETFLIX_PREMIUM_PRICEID)}>
                                                 </input>
                                                 <span className={`h-4 w-4 -bottom-3 absolute  border-l-[15px] border-r-[15px] border-l-transparent border-r-transparent border-t-[20px] ${plan !== 'premium' ? 'border-red-400' : 'border-red-500'}`}></span>
                                             </label>
@@ -92,9 +109,9 @@ function SignupChoosePlan() {
                                 </tr>
                                 <tr className='border-b-[0.1em]'>
                                     <td className='sm:py-3 hidden sm:block'>Video and sound Quality</td>
-                                    <td className={`py-3 text-center ${plan === 'basic' ? 'text-red-600' : null}`}>Good</td>
-                                    <td className={`text-center ${plan === 'standard' ? 'text-red-600' : null}`}>Better</td>
-                                    <td className={`text-center ${plan === 'premium' ? 'text-red-600' : null}`}>Best</td>
+                                    <td className={`py-3 text-center ${plan === NETFLIX_BASIC_PRICEID ? 'text-red-600' : null}`}>Good</td>
+                                    <td className={`text-center ${plan === NETFLIX_STANDARD_PRICEID ? 'text-red-600' : null}`}>Better</td>
+                                    <td className={`text-center ${plan === NETFLIX_PREMIUM_PRICEID ? 'text-red-600' : null}`}>Best</td>
                                 </tr>
 
                                 <tr className=' sm:hidden'>
@@ -102,9 +119,9 @@ function SignupChoosePlan() {
                                 </tr>
                                 <tr className='border-b-[0.1em]'>
                                     <td className='py-3 hidden sm:block'>Resolution</td>
-                                    <td className={`py-3 text-center ${plan === 'basic' ? 'text-red-600' : null}`}>720p</td>
-                                    <td className={`text-center ${plan === 'standard' ? 'text-red-600' : null}`}>1080p</td>
-                                    <td className={`text-center ${plan === 'premium' ? 'text-red-600' : null}`}>4K+HDR</td>
+                                    <td className={`py-3 text-center ${plan === NETFLIX_BASIC_PRICEID ? 'text-red-600' : null}`}>720p</td>
+                                    <td className={`text-center ${plan === NETFLIX_STANDARD_PRICEID ? 'text-red-600' : null}`}>1080p</td>
+                                    <td className={`text-center ${plan === NETFLIX_PREMIUM_PRICEID ? 'text-red-600' : null}`}>4K+HDR</td>
                                 </tr>
 
                                 <tr className=' sm:hidden'>
@@ -112,9 +129,9 @@ function SignupChoosePlan() {
                                 </tr>
                                 <tr className='border-b-[0.1em]'>
                                     <td className='py-3 hidden sm:block'>Devices your household can watch at the same time</td>
-                                    <td className={`py-3 text-center ${plan === 'basic' ? 'text-red-600' : null}`}>1</td>
-                                    <td className={`text-center ${plan === 'standard' ? 'text-red-600' : null}`}>2</td>
-                                    <td className={`text-center ${plan === 'premium' ? 'text-red-600' : null}`}>4</td>
+                                    <td className={`py-3 text-center ${plan === NETFLIX_BASIC_PRICEID ? 'text-red-600' : null}`}>1</td>
+                                    <td className={`text-center ${plan === NETFLIX_STANDARD_PRICEID ? 'text-red-600' : null}`}>2</td>
+                                    <td className={`text-center ${plan === NETFLIX_PREMIUM_PRICEID ? 'text-red-600' : null}`}>4</td>
                                 </tr>
 
                                 <tr className=' sm:hidden'>
@@ -122,19 +139,29 @@ function SignupChoosePlan() {
                                 </tr>
                                 <tr className=''>
                                     <td className='py-3 hidden sm:block'>Monthly price</td>
-                                    <td className={`py-3 text-center ${plan === 'basic' ? 'text-red-600' : null}`}>AED29</td>
-                                    <td className={`text-center ${plan === 'standard' ? 'text-red-600' : null}`}>AED49</td>
-                                    <td className={`text-center ${plan === 'premium' ? 'text-red-600' : null}`}>AED56</td>
+                                    <td className={`py-3 text-center ${plan === NETFLIX_BASIC_PRICEID ? 'text-red-600' : null}`}>AED29</td>
+                                    <td className={`text-center ${plan === NETFLIX_STANDARD_PRICEID ? 'text-red-600' : null}`}>AED49</td>
+                                    <td className={`text-center ${plan === NETFLIX_PREMIUM_PRICEID ? 'text-red-600' : null}`}>AED56</td>
                                 </tr>
                             </tbody>
                         </table>
-                        <div className='text-xs mt-4'>
-                            HD (720p), Full HD (1080p), Ultra HD (4K) and HDR availability subject to your internet service and device capabilities. Not all content is available in all resolutions.
-                            See our Terms of Use for more details.
-                            Only people who live with you may use your account. Watch on 4 different devices at the same time with Premium, 2 with Standard and 1 with Basic.
+                        <div className='text-xs mt-3'>
+                            <span>
+                                HD (720p), Full HD (1080p), Ultra HD (4K) and HDR availability subject to your internet service and device capabilities. Not all content is available in all resolutions.
+                                See our Terms of Use for more details.
+                                Only people who live with you may use your account. Watch on 4 different devices at the same time with Premium, 2 with Standard and 1 with Basic.
+                            </span>
+                            <div>
+                                <span className='text-red-500'>Note: </span>
+                                <span className='text-blue-700'>Please add test card [4242 4242 4242 4242]. Add others details rendomly. </span>
+                            </div>
                         </div>
-                        <div className='flex justify-center items-center text-2xl font-semibold text-white mt-6'>
-                            <button type='submit' className='bg-red-600 sm:w-[50%] rounded-md px-6 py-4 w-full'>Next</button>
+                        <div className='flex justify-center items-center text-2xl font-semibold text-white mt-6' onClick={handleCheckout}>
+                            <button type='submit' className='bg-red-600 hover:bg-red-500 sm:w-[50%] rounded-md px-6 py-4 w-full'>
+                                {
+                                    isLoading ? <Loader /> : 'Next'
+                                }
+                            </button>
                         </div>
                     </form>
                 </div>

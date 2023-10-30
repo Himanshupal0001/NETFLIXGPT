@@ -1,13 +1,44 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import Header from '../components/Header';
 import { netfliexHeroBanner } from '../../public/assets/netflixLogo'
 import { BsChevronRight } from 'react-icons/bs';
 import { AiOutlineCaretDown } from 'react-icons/ai'
 import { IoLanguageOutline } from 'react-icons/io5';
 import AccordianContainer from '../components/AccordianContainer';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { validEmail } from '../utils/validate';
 
 function SignupLandingPage() {
+    const [errMsg, setErrMsg] = useState('');
+    const emailRef = useRef(null);
+    const navigate = useNavigate();
+    const handleNext = () => {
+        try {
+            const errmsg = validEmail(emailRef.current.value);
+            if (errmsg) {
+                console.log(errmsg)
+                setErrMsg(errmsg);
+                return
+            }
+            let email = '';
+            if (emailRef.current.value !== '') {
+                email = emailRef.current.value;
+                //console.log(email)
+                localStorage.setItem('email', email)
+                setTimeout(() => {
+                    navigate('/signup/registration')
+                }, 10);
+            }
+            else {
+                navigate('/');
+                localStorage.removeItem('email')
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+        //console.log(email);
+    }
     return (
         <>
             <div className='flex flex-col items-center'>
@@ -27,15 +58,16 @@ function SignupLandingPage() {
                             <span className='flex justify-center text-xl mt-4'>
                                 Ready to watch? Enter your email to create or restart your membership.
                             </span>
-                            <div className='sm:flex sm:justify-center sm:gap-x-4 mt-4'>
-                                <input type='text' placeholder='Email address' className='p-4 bg-black text-white w-full sm:w-1/2 mb-2 sm:mb-0 border-2 border-slate-600 border-solid rounded-md'></input>
-                                <Link to='/signup/registration' className='p-2 sm:p-4 bg-red-600 w-1/2 sm:w-1/5 rounded-md flex items-center justify-around m-auto sm:m-0'>
-                                    < >
-                                        <div className='text-xl font-bold'>Get Started</div>
+                            <form onSubmit={e => e.preventDefault()}>
+                                <div className='sm:flex sm:justify-center sm:gap-x-4 mt-4'>
+                                    <input type='text' placeholder='Email address' ref={emailRef} className='p-4 bg-black text-white w-full sm:w-1/2 mb-2 sm:mb-0 border-2 border-slate-600 border-solid rounded-md'></input>
+                                    <button className='p-2 sm:p-4 bg-red-600 w-1/2 sm:w-1/5 rounded-md flex items-center justify-around m-auto sm:m-0' onClick={handleNext} type='submit'>
+                                        <div className='text-xl font-bold cursor-pointer'>Get Started</div>
                                         <div><BsChevronRight color='#fff' /></div>
-                                    </>
-                                </Link>
-                            </div>
+                                    </button>
+                                </div>
+                                <span className='sm:ml-32 flex justify-center sm:block text-red-500 font-semibold'>{errMsg}</span>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -129,15 +161,16 @@ function SignupLandingPage() {
                 <div className='w-[80%]  mt-6'>
                     <AccordianContainer Heading='Frequently Asked Questions' />
                     <div className='text-center sm:text-2xl pt-4'>Ready to watch? Enter your email to create or restart your membership.</div>
-                    <div className='sm:flex justify-center gap-x-4 mt-4'>
-                        <input type='text' placeholder='Email address' className='p-4 bg-black text-white w-full sm:w-1/3 mb-2 sm:mb-0 border-2 border-slate-600 border-solid rounded-md'></input>
-                        <Link to='/signup/registration' className='p-2 sm:p-4 bg-red-600 w-1/2 sm:w-1/5 rounded-md flex items-center justify-around m-auto sm:m-0'>
-                            < >
-                                <div className='text-xl font-bold'>Get Started</div>
+                    <form onSubmit={e => e.preventDefault()}>
+                        <div className='sm:flex sm:justify-center sm:gap-x-4 mt-4'>
+                            <input type='text' placeholder='Email address' className='p-4 bg-black text-white w-full sm:w-1/2 mb-2 sm:mb-0 border-2 border-slate-600 border-solid rounded-md'></input>
+                            <button className='p-2 sm:p-4 bg-red-600 w-1/2 sm:w-1/5 rounded-md flex items-center justify-around m-auto sm:m-0' type='submit'>
+                                <div className='text-xl font-bold cursor-pointer'>Get Started</div>
                                 <div><BsChevronRight color='#fff' /></div>
-                            </>
-                        </Link>
-                    </div>
+                            </button>
+                        </div>
+                        <span className='sm:ml-44 flex justify-center sm:block text-red-500 font-semibold'>{errMsg}</span>
+                    </form>
                 </div>
             </div>
 
@@ -180,19 +213,15 @@ function SignupLandingPage() {
 
 export default SignupLandingPage
 
+
 /*
-
- <div>
-                            <ul>
-                                <li>FAQ</li>
-                                <li>Account</li>
-                                <li>Investor Relations</li>
-                                <li>Radeem Gift Cards</li>
-                                <li>Ways to Watch</li>
-                            </ul>
-                            <ul>
-                            <li>Privacy</li>
-                            </ul>
-                        </div>*/
-
-
+<div className='sm:flex justify-center gap-x-4 mt-4'>
+                        <input type='text' placeholder='Email address' className='p-4 bg-black text-white w-full sm:w-1/3 mb-2 sm:mb-0 border-2 border-slate-600 border-solid rounded-md' ref={emailRef}></input>
+                        <Link to='/signup/registration' className='p-2 sm:p-4 bg-red-600 w-1/2 sm:w-1/5 rounded-md flex items-center justify-around m-auto sm:m-0'>
+                            < >
+                                <div className='text-xl font-bold'>Get Started</div>
+                                <div><BsChevronRight color='#fff' /></div>
+                            </>
+                        </Link>
+                    </div>
+*/

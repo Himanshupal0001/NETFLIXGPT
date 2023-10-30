@@ -1,12 +1,37 @@
 import React from 'react'
-import React from 'react'
 import { netflixLogo } from '../../public/assets/netflixLogo'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { IoLanguageOutline } from 'react-icons/io5'
 import { AiOutlineCaretDown } from 'react-icons/ai'
+import { useSelector, useDispatch } from 'react-redux'
+//import { handleSignout } from '../utils/utils'
+//import { useDispatch } from 'react-redux'
+//import { useNavigate } from 'react-router-dom';
+import { signOut } from 'firebase/auth'
+import { auth } from '../utils/firebase';
+import { removeUser } from '../redux/authSlice'
 
 
 function SignupPlane() {
+    const { user } = useSelector(store => store.auth);
+    const navigate = useNavigate();
+    const disptach = useDispatch();
+    const handleClick = () => {
+        navigate('/signup/planform')
+    }
+
+    const handleSignout = () => {
+        signOut(auth)
+            .then(() => {
+                disptach(removeUser());
+                navigate('/')
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+
     return (
         <>
             <div>
@@ -16,10 +41,10 @@ function SignupPlane() {
                             <img src={netflixLogo} alt='logo' className='w-24 h-auto sm:w-52' />
                         </div>
                     </Link>
-                    <div>
-                        <Link to='/'>
-                            <p className='sm:text-lg font-semibold hover:underline'>Sign In</p>
-                        </Link>
+                    <div className='cursor-pointer' onClick={handleSignout}>
+                        <p className='sm:text-lg font-semibold hover:underline'>
+                            {user.token ? 'Sign out' : 'Sign in'}
+                        </p>
                     </div>
                 </header>
 
@@ -30,33 +55,33 @@ function SignupPlane() {
                                 <img src='https://assets.nflxext.com/ffe/siteui/acquisition/simplicity/Checkmark.png' alt='checkbox' className='w-12 sm:w-16' />
                             </div>
                             <div className=' text-xs mb-2 sm:text-center mt-2'>
-                                STEP <strong>1</strong> OF <strong>3</strong>
+                                STEP <strong>2</strong> OF <strong>3</strong>
                             </div>
                             <div className='text-[2rem] font-[500]   font-roboto leading-8 mb-4'>
                                 Choose your plan.
                             </div>
                             <div>
                                 <div className='flex items-center gap-x-2 mb-4 '>
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-red-600 h-6 w-6 self-start" data-name="Checkmark" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.2928 4.29285L22.7071 5.70706L8.70706 19.7071C8.51952 19.8946 8.26517 20 7.99995 20C7.73474 20 7.48038 19.8946 7.29285 19.7071L0.292847 12.7071L1.70706 11.2928L7.99995 17.5857L21.2928 4.29285Z" fill="currentColor"></path></svg>
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-red-600 h-6 w-6 self-start" data-name="Checkmark" aria-hidden="true"><path fillRule="evenodd" clipRule="evenodd" d="M21.2928 4.29285L22.7071 5.70706L8.70706 19.7071C8.51952 19.8946 8.26517 20 7.99995 20C7.73474 20 7.48038 19.8946 7.29285 19.7071L0.292847 12.7071L1.70706 11.2928L7.99995 17.5857L21.2928 4.29285Z" fill="currentColor"></path></svg>
                                     <span className='text-xl'>
                                         No commitments, cancel anytime.
                                     </span>
                                 </div>
                                 <div className='flex items-center gap-x-2 mb-4 '>
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-red-600 h-6 w-6 self-start" data-name="Checkmark" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.2928 4.29285L22.7071 5.70706L8.70706 19.7071C8.51952 19.8946 8.26517 20 7.99995 20C7.73474 20 7.48038 19.8946 7.29285 19.7071L0.292847 12.7071L1.70706 11.2928L7.99995 17.5857L21.2928 4.29285Z" fill="currentColor"></path></svg>
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-red-600 h-6 w-6 self-start" data-name="Checkmark" aria-hidden="true"><path fillRule="evenodd" clipRule="evenodd" d="M21.2928 4.29285L22.7071 5.70706L8.70706 19.7071C8.51952 19.8946 8.26517 20 7.99995 20C7.73474 20 7.48038 19.8946 7.29285 19.7071L0.292847 12.7071L1.70706 11.2928L7.99995 17.5857L21.2928 4.29285Z" fill="currentColor"></path></svg>
                                     <span className='text-xl'>
                                         Unlimited viewing on all your devices.
                                     </span>
                                 </div>
                                 <div className='flex items-center gap-x-2'>
-                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-red-600 h-6 w-6 self-start" data-name="Checkmark" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M21.2928 4.29285L22.7071 5.70706L8.70706 19.7071C8.51952 19.8946 8.26517 20 7.99995 20C7.73474 20 7.48038 19.8946 7.29285 19.7071L0.292847 12.7071L1.70706 11.2928L7.99995 17.5857L21.2928 4.29285Z" fill="currentColor"></path></svg>
+                                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-red-600 h-6 w-6 self-start" data-name="Checkmark" aria-hidden="true"><path fillRule="evenodd" clipRule="evenodd" d="M21.2928 4.29285L22.7071 5.70706L8.70706 19.7071C8.51952 19.8946 8.26517 20 7.99995 20C7.73474 20 7.48038 19.8946 7.29285 19.7071L0.292847 12.7071L1.70706 11.2928L7.99995 17.5857L21.2928 4.29285Z" fill="currentColor"></path></svg>
                                     <span className='text-xl'>
                                         No commitments, cancel anytime.
                                     </span>
                                 </div>
                             </div>
-                            <div className='h-fit flex justify-center mt-4'>
-                                <button className='p-2 h-16 sm:w-96 w-full sm:p-4 bg-red-600  text-white rounded-md text-center sm:flex items-center justify-center m-auto sm:m-0'>
+                            <div className='h-fit flex justify-center mt-4' onClick={handleClick}>
+                                <button className='p-2 h-16 sm:w-96 w-full sm:p-4 bg-red-600 hover:bg-red-500  text-white rounded-md text-center sm:flex items-center justify-center m-auto sm:m-0'>
                                     <div className='text-2xl font-bold'>Next</div>
                                 </button>
                             </div>

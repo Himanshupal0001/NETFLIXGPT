@@ -6,6 +6,8 @@ import SignupRegFormPage from '../pages/SignupRegFormPage'
 import SignupPlane from '../pages/SignupPlane'
 import SignupChoosePlan from '../pages/SignupChoosePlan'
 import LoginPage from '../pages/LoginPage'
+import ProtectedRoutes from './ProtectedRoutes'
+import Browsr from '../pages/Browsr'
 function Router() {
     const routes = createBrowserRouter([
         {
@@ -21,16 +23,25 @@ function Router() {
             element: <SignupRegFormPage />
         },
         {
-            path: '/signup',
-            element: <SignupPlane />
-        },
-        {
-            path: '/signup/planform',
-            element: <SignupChoosePlan />
-        },
-        {
             path: '/login',
             element: <LoginPage />
+        },
+        {
+            element: <ProtectedRoutes />,
+            children: [
+                {
+                    path: '/signup',
+                    element: <SignupPlane />
+                },
+                {
+                    path: '/signup/planform',
+                    element: <SignupChoosePlan />
+                },
+                {
+                    path: '/browse',
+                    element: <Browsr />
+                }
+            ]
         }
     ])
     return (
