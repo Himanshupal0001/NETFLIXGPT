@@ -9,6 +9,7 @@ import {
 
 import { getFunctions, httpsCallable } from "firebase/functions";
 
+//handle checkout 
 export const getCheckoutUrl = async (app, priceId) => {
     const auth = getAuth(app);
     const userId = auth.currentUser?.uid;
@@ -24,7 +25,8 @@ export const getCheckoutUrl = async (app, priceId) => {
 
     const docRef = await addDoc(checkoutSessionRef, {
         price: priceId,
-        success_url: window.location.origin + '/login',
+        //after payment success user will redirect to hommepage --> can replace with /login to redirect the user to login page
+        success_url: window.location.origin + '/browse',
         cancel_url: window.location.origin,
     });
 
@@ -36,7 +38,7 @@ export const getCheckoutUrl = async (app, priceId) => {
                 reject(new Error(`An error occurred: ${error.message}`));
             }
             if (url) {
-                console.log("Stripe Checkout URL:", url);
+                //console.log("Stripe Checkout URL:", url);
                 unsubscribe();
                 resolve(url);
             }

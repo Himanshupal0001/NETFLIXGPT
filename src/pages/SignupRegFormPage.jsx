@@ -62,7 +62,7 @@ function SignupRegFormPage() {
                             navigate('/signup')
                         })
                         .catch(error => {
-                            const errorCode = error.code;
+                            //const errorCode = error.code;
                             const errorMesage = error.message;
                             console.log(errorMesage)
                         })
@@ -73,7 +73,7 @@ function SignupRegFormPage() {
             })
             .catch(
                 (error) => {
-                    const errorCode = error.code;
+                    //const errorCode = error.code;
                     const errorMesage = error.message;
                     console.log(errorMesage);
                     setIsLoading(false)

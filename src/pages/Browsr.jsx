@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { app, auth } from '../utils/firebase'
 import { getFirestore, doc, getDoc, collection, getDocs } from 'firebase/firestore'
 import { useSelector } from 'react-redux';
-
+import Header from '../components/Header'
 
 function Browsr() {
 
@@ -50,7 +50,7 @@ function Browsr() {
 
     return (
         <div>
-            browse
+            <Header />
 
         </div>
     )
