@@ -73,14 +73,14 @@ function LoginPage() {
             <Header />
             <div className='sm:max-h-screen overflow-hidden relative'>
                 <Link to='/'>
-                    <img src={netfliexHeroBanner} alt='hero banner' className='h-[70vh] object-fill sm:h-full' />
+                    <img src={netfliexHeroBanner} alt='hero banner' className='h-[80vh] object-fill sm:h-full' />
                 </Link>
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black text-white flex items-center justify-center sm:px-0">
                     <form className='bg-stone-900 p-12 w-screen sm:w-[30rem] text-gray-400' onSubmit={e => e.preventDefault()}>
                         <div className='text-[2rem] font-medium mb-6 text-white'> Sign In</div>
                         <div className='mb-6'>
                             <div className='flex flex-col mb-2'>
-                                <label htmlFor='email' className='mb-1'>Email or Phone number</label>
+                                <label htmlFor='email' className='mb-1'>Email</label>
                                 <input type='text' id='email' ref={emailRef} placeholder='Email or phone number' className='p-3 rounded-md bg-stone-700 text-lg'></input>
                             </div>
                             <div className='flex flex-col'>
@@ -92,7 +92,7 @@ function LoginPage() {
                         <div className='text-red-500 mb-2'>{errorMessage}</div>
 
                         <div className='flex justify-center' onClick={handleButtonClick}>
-                            <button className=' p-3 bg-red-600 text-white w-full font-medium rounded-md' type='submit' onClick={handleButtonClick}>{isLoading ? <Loader /> : 'Sign in'}</button>
+                            <button className=' p-3 bg-red-600 text-white w-full font-medium rounded-md' type='submit'>{isLoading ? <Loader /> : 'Sign in'}</button>
                         </div>
                         <div className='flex items-center justify-between text-sm mt-4'>
                             <div className='flex items-center gap-x-2'>

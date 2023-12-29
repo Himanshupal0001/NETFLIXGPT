@@ -131,11 +131,11 @@ function SignupLandingPage() {
                         <div>
                             <div className='relative'>
                                 <img src='https://assets.nflxext.com/ffe/siteui/acquisition/ourStory/fuji/desktop/device-pile.png' alt='tv' className='w-full' />
-                                <div className='absolute overflow-hidden top-[20%] left-10 sm:left-16 -z-10 '>
-                                    <video autoPlay loop muted className='object-contain overflow-clip w-[85%]' >
-                                        <source src='https://assets.nflxext.com/ffe/siteui/acquisition/ourStory/fuji/desktop/video-devices.m4v' type='video/mp4' />
-                                    </video>
-                                </div>
+
+                                <video autoPlay loop muted className='object-contain  w-[62%] absolute top-[10%] left-[20%] -z-10 ' >
+                                    <source src='https://assets.nflxext.com/ffe/siteui/acquisition/ourStory/fuji/desktop/video-devices.m4v' type='video/mp4' />
+                                </video>
+
                             </div>
                         </div>
                     </div>

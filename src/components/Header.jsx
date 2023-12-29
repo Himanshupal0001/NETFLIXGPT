@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { netflixLogo } from '../../public/assets/netflixLogo'
 import Button from './Button'
 import { AiOutlineCaretDown } from 'react-icons/ai'
@@ -6,35 +6,21 @@ import { IoLanguageOutline } from 'react-icons/io5'
 import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
 import { FiSearch } from "react-icons/fi";
 import { GoBell } from "react-icons/go";
-import { Link, useLocation } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { Link} from 'react-router-dom'
 import { headerMenu, avatarModel } from '../utils/contants'
 import { netflixAvatar } from '../../public/assets/netflixLogo'
+import useAuth from '../hooks/useAuth'
 import Model from './Model'
 function Header() {
-    const [curPath, setCurPath] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState();
-    const [isMouseHovering, setIsMouseHovering] = useState(false)
-    const { user } = useSelector(store => store.auth)
 
-    const location = useLocation();
-    //console.log(location.pathname)
-    useEffect(() => {
-        if (location) {
-            setCurPath(location.pathname);
-        }
-        if (Object.keys(user).length > 0 && user.uid.length > 0) {
-            setIsLoggedIn(true)
-        }
-        else {
-            setIsLoggedIn(false)
-        }
-    }, [user, location]);
-
-    const handleAvatarModel = () => {
-        setIsMouseHovering(!isMouseHovering)
-    }
-
+    const {
+        curPath,
+        isLoggedIn,
+        isMouseHovering,
+        user,
+        handleMouseEnter,
+        handleMouseLeave,
+      } = useAuth();
     return (
         isLoggedIn === false ? (
             <div className='flex justify-between items-center w-full sm:w-[80%] z-10 absolute py-1 px-4'>
@@ -63,9 +49,9 @@ function Header() {
             </div >
         ) :
             (
-                <div className='flex justify-between items-center w-full z-10 absolute px-16'>
+                <div className='flex justify-around items-center w-full sm:w-[80vw] z-10 absolute py-1 px-4'>
                     <div className='flex gap-2 items-center'>
-                        <Link to='/'>
+                        <Link to='/browse'>
                             <img src={netflixLogo} alt='logo' className='h-12' />
                         </Link>
                         <div>
@@ -86,7 +72,7 @@ function Header() {
                         <FiSearch size='1.5em' />
                         <p className='font-medium text-md'>Kids</p>
                         <GoBell size='1.5em' />
-                        <div className='flex gap-x-2 items-center relative' onClick={handleAvatarModel}>
+                        <div className={`flex gap-x-2 items-center relative sm:`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                             <img src={netflixAvatar} alt='avatar' className='rounded-sm' />
                             {
                                 isMouseHovering ? <IoMdArrowDropup /> : <IoMdArrowDropdown />

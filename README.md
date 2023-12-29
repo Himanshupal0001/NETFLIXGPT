@@ -3,6 +3,8 @@
 -install react
 -install react-router-dom
 -Routing of app
+-install & config tailwind
+-Header
 
 
 # Structure
