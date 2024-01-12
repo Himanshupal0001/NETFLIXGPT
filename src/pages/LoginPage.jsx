@@ -8,13 +8,14 @@ import { checkValidData } from '../utils/validate';
 import { signInWithEmailAndPassword } from "firebase/auth"
 import { auth } from '../utils/firebase'
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addUser } from '../redux/authSlice';
 import Loader from '../components/Loader';
 //import usePaymentWall from '../hooks/usePaymentWall';
 
 
 function LoginPage() {
+    const { token } = useSelector(store => store.auth.user)
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [errorMessage, setErrorMessage] = useState([]);
@@ -23,6 +24,10 @@ function LoginPage() {
     const passRef = useRef(null);
     //const { stripeId, payment } = usePaymentWall();
     //console.log(stripeId, payment);
+
+    if (token) {
+        navigate('/browse');
+    }
 
     const handleButtonClick = () => {
         setIsLoading(true)

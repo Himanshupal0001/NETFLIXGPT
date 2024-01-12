@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { netflixLogo } from '../../public/assets/netflixLogo'
 import Button from './Button'
 import { AiOutlineCaretDown } from 'react-icons/ai'
@@ -6,7 +6,7 @@ import { IoLanguageOutline } from 'react-icons/io5'
 import { IoMdArrowDropup, IoMdArrowDropdown } from "react-icons/io";
 import { FiSearch } from "react-icons/fi";
 import { GoBell } from "react-icons/go";
-import { Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { headerMenu, avatarModel } from '../utils/contants'
 import { netflixAvatar } from '../../public/assets/netflixLogo'
 import useAuth from '../hooks/useAuth'
@@ -20,10 +20,10 @@ function Header() {
         user,
         handleMouseEnter,
         handleMouseLeave,
-      } = useAuth();
+    } = useAuth();
     return (
         isLoggedIn === false ? (
-            <div className='flex justify-between items-center w-full sm:w-[80%] z-10 absolute py-1 px-4'>
+            <div className='flex justify-between items-center w-full sm:w-[80%] z-10 absolute py-1 px-4 text-white'>
                 <div className='h-full overflow-hidden'>
                     <Link to='/'>
                         <img src={netflixLogo} alt='logo' className='w-32 h-auto sm:w-48' />
@@ -49,18 +49,18 @@ function Header() {
             </div >
         ) :
             (
-                <div className='flex justify-around items-center w-full sm:w-[80vw] z-10 absolute py-1 px-4'>
-                    <div className='flex gap-2 items-center'>
+                <div className='flex justify-between items-center w-full sm:w-full z-10 absolute py-1 px-12 text-white'>
+                    <div className='flex gap-3 items-center'>
                         <Link to='/browse'>
                             <img src={netflixLogo} alt='logo' className='h-12' />
                         </Link>
                         <div>
-                            <ul className='sm:flex gap-x-2 hidden '>
+                            <ul className='md:flex gap-x-2 hidden '>
                                 {
                                     headerMenu?.map((item) => {
                                         return (
                                             <Link to={item.path} key={item.id}>
-                                                <li className='font-medium'>{item.name}</li>
+                                                <li>{item.name}</li>
                                             </Link>
                                         )
                                     })
@@ -72,7 +72,7 @@ function Header() {
                         <FiSearch size='1.5em' />
                         <p className='font-medium text-md'>Kids</p>
                         <GoBell size='1.5em' />
-                        <div className={`flex gap-x-2 items-center relative sm:`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                        <div className={`flex gap-x-2 items-center relative`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                             <img src={netflixAvatar} alt='avatar' className='rounded-sm' />
                             {
                                 isMouseHovering ? <IoMdArrowDropup /> : <IoMdArrowDropdown />

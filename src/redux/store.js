@@ -9,6 +9,7 @@ import {
 } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import authReducer from './authSlice';
+import movieReducer from './movieSlice';
 
 const persistConfig = {
     key: 'root',
@@ -16,10 +17,13 @@ const persistConfig = {
 };
 
 const reducers = combineReducers({
-    auth: authReducer
+    auth: authReducer,
+    movies: movieReducer
 })
 
-const persisteReducer = persistReducer(persistConfig, reducers)
+const persisteReducer = persistReducer(persistConfig, reducers);
+
+
 const store = configureStore({
     reducer: persisteReducer,
     middleware: (getDefaultMiddleware) =>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useLocation, useNavigate } from 'react-router-dom'
-function useAuth(){
+function useAuth() {
     const [curPath, setCurPath] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [isMouseHovering, setIsMouseHovering] = useState(false);
@@ -31,11 +31,13 @@ function useAuth(){
     // }
 
     const handleMouseEnter = () => {
-        setIsMouseHovering(true)
+        setIsMouseHovering(true);
+        console.log('mouseEnters')
     }
 
     const handleMouseLeave = () => {
-        setIsMouseHovering(false)
+        setIsMouseHovering(false);
+        console.log('mouse out')
     }
 
     return {
@@ -45,7 +47,7 @@ function useAuth(){
         user,
         handleMouseEnter,
         handleMouseLeave,
-      };
+    };
 
 }
 

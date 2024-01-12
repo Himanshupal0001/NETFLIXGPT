@@ -26,4 +26,8 @@
         -Movie Suggestions
 
 
+# Functionalities
+- Implement GetNowPlaying movies Api call
 
+# Current Status
+- At VideoPlaybackContainer

@@ -11,7 +11,7 @@ const Model = ({ children, token }) => {
     }, [token, hasToken])
     const handleSignOut = useSignout();
     return (
-        <div className='absolute  w-52  top-8 right-0 border-2  text-white bg-black '>
+        <div className='absolute mt-4  w-52  top-8 right-0 border-2 sm:mt-0  text-white bg-black '>
             {
                 children.map((item, index) => {
                     return (
