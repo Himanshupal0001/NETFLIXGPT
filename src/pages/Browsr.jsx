@@ -4,7 +4,10 @@ import MainContainer from '../components/MainContainer'
 import SecondaryContainer from '../components/SecondaryContainer'
 import useNowPlayingMovies from '../hooks/useNowPlayingMovies';
 function Browsr() {
+
     useNowPlayingMovies();
+    const { isLoading } = useNowPlayingMovies();
+    if (isLoading === true) return;
     return (
         <div className='flex items-center  flex-col'>
             <Header />

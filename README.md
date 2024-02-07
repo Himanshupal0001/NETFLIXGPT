@@ -20,7 +20,7 @@
             -play button + like/deslike
             -Genral description + hashtags + genre
             -movie suggestions
-        -movie suggestions
+        -movie suggestions 
     -NetflixGPT
         -Search Bar
         -Movie Suggestions
@@ -30,4 +30,4 @@
 - Implement GetNowPlaying movies Api call
 
 # Current Status
-- At VideoPlaybackContainer
+- issue at useGetMovieTrailer

@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import VideoTitle from './VideoTitle'
-import { REACT_APP_API_OPTIONS } from '../utils/utils';
-import { useDispatch, useSelector } from 'react-redux';
-import { addTrailer } from '../redux/movieSlice';
+import { useSelector } from 'react-redux';
 import useGetMovieTrailer from '../hooks/useGetMovieTrailer';
 function VideoPlaybackContainer({ title, id, overview }) {
-    // const [trailerId, setTrailerId] = useState(null)
-    const { trailer } = useSelector(store => store.movies)
     useGetMovieTrailer(id)
+    const { trailer } = useSelector(store => store.movies);
+    const { isLoading } = useGetMovieTrailer();
+    if (isLoading === true) return;
     return (
         <div className='bg-green-300 h-screen relative'>
             {/* video playback */}
 
-            <iframe src={"https://www.youtube.com/embed/" + trailer.key + "?autoplay=0&mute=1&showinfo=0&controls=0&rel=0"}
+            <iframe src={"https://www.youtube.com/embed/" + trailer?.key + "?autoplay=0&mute=1&showinfo=0&controls=0&rel=0"}
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; gyroscope;"
                 className='h-full w-full aspect-video'

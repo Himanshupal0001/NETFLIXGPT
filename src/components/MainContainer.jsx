@@ -4,7 +4,6 @@ import VideoPlaybackContainer from './VideoPlaybackContainer'
 function MainContainer() {
     const movie = useSelector(store => store.movies.nowPlaying[0]);
     if (movie === null) return;
-    console.log(movie)
     const { original_title, overview, id } = movie;
     return (
         <div className=' w-screen'>
