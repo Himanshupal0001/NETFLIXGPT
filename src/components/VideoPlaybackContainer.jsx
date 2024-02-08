@@ -8,7 +8,7 @@ function VideoPlaybackContainer({ title, id, overview }) {
     const { isLoading } = useGetMovieTrailer();
     if (isLoading === true) return;
     return (
-        <div className='bg-green-300 h-screen relative'>
+        <div className='h-screen relative'>
             {/* video playback */}
 
             <iframe src={"https://www.youtube.com/embed/" + trailer?.key + "?autoplay=0&mute=1&showinfo=0&controls=0&rel=0"}
