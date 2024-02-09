@@ -3,7 +3,7 @@ import MovieList from './MovieList'
 
 function SecondaryContainer() {
     return (
-        <div className='w-full'>
+        <div className='w-full bg-black'>
             <MovieList title='Popular' type='popular' />
             {/* MovieList - popular 
             MovieList-NowPlaying
