@@ -10,11 +10,11 @@ function useGetMovieList(type) {
         fetchMovieList(type);
     }, [type]);
     const fetchMovieList = async (type) => {
+        setIsLoading(true)
         try {
-            setIsLoading(true)
             const response = await fetch(MOVIES_URL + type, REACT_APP_API_OPTIONS);
             const data = await response.json();
-            dispatch(getMovieList(data.results))
+            dispatch(getMovieList({ key: type, data: data.results }))
         }
         catch (err) {
             console.log(err)

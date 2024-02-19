@@ -8,15 +8,15 @@ function VideoPlaybackContainer({ title, id, overview }) {
     const { isLoading } = useGetMovieTrailer();
     if (isLoading === true) return;
     return (
-        <div className='h-screen relative'>
+        <div className=' w-full h-0 md:h-screen relative overflow-hidden pb-[56.25%] md:pb-0'>
             {/* video playback */}
 
             <iframe src={"https://www.youtube.com/embed/" + trailer?.key + "?autoplay=0&mute=1&showinfo=0&controls=0&rel=0"}
                 title="YouTube video player"
                 allow="accelerometer; autoplay; clipboard-write; gyroscope;"
-                className='h-full w-full aspect-video'
+                className='h-full w-full absolute top-0 bottom-0 left-0 right-0'
             ></iframe>
-            <VideoTitle title={title} overview={overview} />
+            <VideoTitle title={title} overview={overview} className='invisible' />
         </div>
     )
 }

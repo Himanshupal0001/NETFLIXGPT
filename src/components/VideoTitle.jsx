@@ -5,7 +5,7 @@ import { HiOutlineSpeakerWave } from "react-icons/hi2";
 
 function VideoTitle({ title, overview }) {
     return (
-        <div className='absolute w-full bottom-0 h-[45%]'>
+        <div className='absolute w-full bottom-0 h-[45%] invisible'>
             {/* title and header */}
             <div className='px-10 text-white'>
                 <h1 className='text-5xl font-semibold '>{title}</h1>
@@ -24,8 +24,7 @@ function VideoTitle({ title, overview }) {
                     </button>
                 </div>
                 <div className='flex gap-x-2 cursor-pointer'>
-                    <button className='p-2 rounded-full border-white border-2'><HiOutlineSpeakerWave size='1.5em' color='white' />
-                    </button>
+                    <button className='p-2 rounded-full border-white border-2'><HiOutlineSpeakerWave size='1.5em' color='white' /></button>
                     <div className='bg-gray-500 bg-opacity-50 border-l-2 border-white flex items-center w-20 pl-2 text-white text-lg'>18+</div>
                 </div>
             </div>

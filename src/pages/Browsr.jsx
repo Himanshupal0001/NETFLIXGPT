@@ -9,7 +9,7 @@ function Browsr() {
     const { isLoading } = useNowPlayingMovies();
     if (isLoading === true) return;
     return (
-        <div className='flex items-center  flex-col'>
+        <div className='flex items-center flex-col bg-black overflow-hidden'>
             <Header />
             <MainContainer />
             <SecondaryContainer />
